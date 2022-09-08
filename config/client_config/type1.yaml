@@ -1,0 +1,7 @@
+model: LeNet5
+epoch_per_round: 1
+optimizer: Adam
+lr: 1e-3
+lambda_kd: 10
+lambda_disc: 1
+feature_dim: 80

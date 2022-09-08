@@ -1,1 +1,1 @@
-LOG_FILE = "./log/tmp/debug.log"
+DEFAULT_CONFIG_FILE = "config/default.yaml"

@@ -1,57 +1,45 @@
 import yaml
 import argparse
+from argparse import Namespace
+
+from scoml.constants import DEFAULT_CONFIG_FILE
+
+# create local logger
 import logging
-import datetime
-
-
-from scoml.constants import LOG_FILE
-
-def get_logger(name):
-    """Create a logger.
-    
-    Args:
-        -name: name of logger (max 11 characters)
-        """
-    
-    # create logger with name
-    logger = logging.getLogger(name)
-    logger.setLevel(logging.DEBUG)
-    
-    # create file handler which logs even debug messages
-    fh = logging.FileHandler(LOG_FILE, mode='a')
-    fh.setLevel(logging.DEBUG)
-    
-    # create console handler with a higher log level
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.INFO)
-    
-    # create formatter and add it to the handlers
-    fh_formatter = logging.Formatter('%(asctime)-25s| %(name)-16s| %(levelname)-9s| %(message)s')
-    ch_formatter = logging.Formatter('%(name)-16s| %(levelname)-9s| %(message)s')
-    fh.setFormatter(fh_formatter)
-    ch.setFormatter(ch_formatter)
-    
-    # add the handlers to the logger
-    logger.addHandler(fh)
-    logger.addHandler(ch)
-
-    return logger
-
+logger = logging.getLogger(__name__)
 
 
 def get_args():
+    """Getting the command line and file arguments."""
     
-    logger = get_logger(__name__)
-    logger.info("inside utils")
-    
+    # add arguments
     parser = argparse.ArgumentParser(description="SCoML")
-    parser.add_argument("--yaml_config_file", "--cf", 
+    parser.add_argument("--config-file", "-c",
                         help="yaml configuration file", 
                         type=str, 
-                        default="")
-    
-    args, unknown = parser.parse_known_args()
-   
+                        dest = "config_file",
+                        default=DEFAULT_CONFIG_FILE)
+  
+    # parse command line arguments and logging for info
+    line_args, unknown = parser.parse_known_args()
+    logger.info("Line arguments: {}".format(", ".join(["{}='{}'".format(k, v) for k, v in line_args.__dict__.items()])))    
+    for value in unknown:
+        logger.warning("Unknown line argument '{}'".format(value))
+        
+    # read config file
+    with open(line_args.config_file, mode='r') as f:
+        dict_args = yaml.load(f, Loader=yaml.FullLoader)
+        
+    # log file arguments
+    logger.info("File arguments: {}".format(dict_args))
+
+    # merge line and file arguments (priority to command line arguments)
+    if dict_args is not None:
+        dict_args.update(vars(line_args))
+        args = Namespace(**dict_args)    
+    else:
+        logger.warning("Empty config file")
+        args = line_args
     
     return args
 
