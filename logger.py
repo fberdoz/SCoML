@@ -27,8 +27,8 @@ def init_logger(name=None):
     ch.setLevel(logging.INFO)
     
     # create formatter and add it to the handlers
-    fh_formatter = logging.Formatter('%(asctime)-25s| %(name)-16s| %(levelname)-9s| %(message)s')
-    ch_formatter = logging.Formatter('%(name)-16s| %(levelname)-9s| %(message)s')
+    fh_formatter = logging.Formatter('%(asctime)-25s| %(name)-16s| %(levelname)-8s| %(message)s')
+    ch_formatter = logging.Formatter('%(name)-16s| %(levelname)-8s| %(message)s')
     fh.setFormatter(fh_formatter)
     ch.setFormatter(ch_formatter)
     
