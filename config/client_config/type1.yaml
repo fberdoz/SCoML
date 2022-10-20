@@ -1,7 +1,10 @@
-model: LeNet5
-epoch_per_round: 1
-optimizer: Adam
-lr: 1e-3
+model_type: lenet5
+epochs_per_round: 1
+batch_size: 16
+optimizer: adam
+loss: cross-entropy
+lr: 0.001
 lambda_kd: 10
 lambda_disc: 1
-feature_dim: 80
+feature_dim: 120
+dropout: 0
