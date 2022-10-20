@@ -4,34 +4,39 @@ from scoml.network import Network
 import logging
 logger = logging.getLogger(__name__)
 
-class SCoMLSimulator():
+class Simulator():
+    """Root class for the simulation"""
     
-    def __init__(self, args):
-        self.args = args
-        self.network = Network(args)
-        logger.debug("Simulator initialized")
+    def __init__(self, config):
+        self.config = config
 
-    def init_network(self):
-        for client_config, n in self.args.client_types.items():
-            for i in range(n):
-                self.network.add_client(client_config)
+        # network initialization
+        self.network = Network(config)
 
+        logger.debug("Simulator initialized succesfully")
 
-    def train_clients(self):    
-        pass
+    def _train_clients(self):
+        """Perform local training on each clients device."""
+        
+        # iterate through clients
+        for ip, client in self.network.clients.items():
+            client.local_update()
 
-    def communicate(self):
+    def _communicate(self):
         pass
 
     def run(self):
         logger.debug("Starting the simulation")
-        for e in range(self.args.rounds):
+        for r in range(1, self.config["rounds"]+1):
             
             # Local updates on client side
-            self.train_clients()
+            self._train_clients()
             
             # Communication between peers
-            self.communicate()
+            self._communicate()
+            
+            # logging
+            logger.info("Round {} done.".format(r))
 
         logger.debug("Simulation over")
             

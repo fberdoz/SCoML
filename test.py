@@ -1,14 +1,16 @@
 import scoml
-from scoml.simulator import SCoMLSimulator
+from scoml.simulator import Simulator
 
 # initialize logger
 from logger import init_logger
 logger = init_logger()
 logger.debug("Root logger initialized")
 
-args = scoml.init()
+# Load config
+config = scoml.get_args()
 
-simulator = SCoMLSimulator(args)
+# create simulator instance
+simulator = Simulator(config)
 
-# high level pipeline
+# run simulation
 simulator.run()
