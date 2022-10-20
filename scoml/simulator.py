@@ -1,4 +1,7 @@
+
+from torch.utils.tensorboard import SummaryWriter
 from scoml.network import Network
+import numpy as np
 
 # create local logger
 import logging
@@ -13,6 +16,9 @@ class Simulator():
         # network initialization
         self.network = Network(config)
 
+        # create tensorboard writer for performance tracking
+        self.writer = SummaryWriter()
+        
         logger.debug("Simulator initialized succesfully")
 
     def _train_clients(self):
@@ -34,6 +40,9 @@ class Simulator():
             
             # Communication between peers
             self._communicate()
+            
+            # monitoring performance
+            self.writer.add_scalar("Test", np.random.random(), r)
             
             # logging
             logger.info("Round {} done.".format(r))
