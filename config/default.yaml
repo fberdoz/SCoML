@@ -1,6 +1,9 @@
-dataset: MNIST
-rounds: 100
+dataset: mnist
+rounds: 10
 shared_dim: 100
+partition: iid
+reduced: tiny
+beta: 10
 client_types:
   config/client_config/type1.yaml: 2
   config/client_config/type2.yaml: 3
